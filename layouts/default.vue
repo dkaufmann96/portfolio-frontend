@@ -3,10 +3,13 @@
     <header class="header">
       <div class="header__section header__section--media">
         <nuxt-link to="/">
-        <img
-          src="https://api.danielkaufmann.at/uploads/profile_fa67fd51fb.jpeg"
-          alt="Daniel"
-        />
+          <img
+            src="~/assets/profile.jpeg"
+            width="100"
+            height="100"
+            :srcset="require('~/assets/profile.jpeg').srcSet"
+            alt="Daniel"
+          />
         </nuxt-link>
       </div>
 

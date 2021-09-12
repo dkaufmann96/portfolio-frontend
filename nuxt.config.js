@@ -14,6 +14,8 @@ export default {
     ]
   },
 
+  target: 'static',
+
   env: {
     strapiBaseUri: process.env.API_URL || 'http://localhost:1337',
   },
@@ -21,7 +23,7 @@ export default {
   // Load fonts
   webfontloader: {
     google: {
-      families: ['Rubik:300,400,500'],
+      families: ['Rubik:300,400,500&display=swap'],
     },
   },
 
@@ -29,8 +31,7 @@ export default {
   css: ['~/assets/styles.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-  ],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -41,6 +42,8 @@ export default {
     '@nuxtjs/eslint-module',
     // https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    // https://github.com/robcresswell/nuxt-compress
+    'nuxt-compress',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -53,6 +56,7 @@ export default {
     '@nuxtjs/sitemap',
     '@nuxtjs/apollo',
     '@nuxtjs/markdownit',
+    'nuxt-responsive-loader',
   ],
 
   render: {
@@ -102,9 +106,14 @@ export default {
     injected: true,
   },
 
+  responsiveLoader: {
+    name: 'images/[name]-[width].[ext]',
+    sizes: [80, 100, 240, 320, 460, 640, 768, 960, 1024, 1280, 1600, 1920],
+    placeholder: true,
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend(config, ctx) {},
     analyze: false,
     extractCSS: true,
   },

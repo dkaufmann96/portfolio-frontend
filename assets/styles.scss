@@ -275,7 +275,7 @@ strong {
 .header__section--media img {
   border: 3px solid $blue;
   border-radius: 1000px;
-  width: 100px;
+  aspect-ratio: attr(width) / attr(height);
 }
 
 .header__section--menu {
@@ -306,7 +306,7 @@ strong {
   }
 
   .header__section--media img {
-    width: 80px;
+    aspect-ratio: attr(width) / attr(height);
   }
 
   .page-text {
