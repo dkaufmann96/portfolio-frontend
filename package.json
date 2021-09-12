@@ -1,6 +1,7 @@
 {
   "name": "portfolio-frontend",
   "version": "1.0.0",
+  "description": "Daniel Kaufmanns personal web page",
   "private": true,
   "scripts": {
     "dev": "nuxt",
