@@ -44,6 +44,7 @@ export default {
     '@nuxtjs/dotenv',
     // https://github.com/robcresswell/nuxt-compress
     'nuxt-compress',
+    '@/modules/sitemapRouteGenerator'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
