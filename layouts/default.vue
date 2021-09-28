@@ -25,6 +25,7 @@
           <nuxt-link to="/contact" aria-label="contact" class="menu__item"
             >Contact</nuxt-link
           >
+          <a href="https://api.danielkaufmann.at/uploads/CV_4180c1eb07.pdf" ria-label="cv" class="menu__item">CV</a>
         </nav>
       </div>
     </header>
