@@ -49,7 +49,7 @@
     "nuxt-compress": "^5.0.0",
     "prettier": "^2.3.2",
     "sass": "^1.39.2",
-    "sass-loader": "^10.1.0",
+    "sass-loader": "^12.3.0",
     "vue-jest": "^3.0.4"
   }
 }
