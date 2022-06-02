@@ -1947,10 +1947,10 @@
   resolved "https://registry.npmjs.org/@josephg/resolvable/-/resolvable-1.0.1.tgz"
   integrity sha512-CtzORUwWTTOTqfVtHaKRJ0I1kNQd1bpn3sUh8I3nJDVY+5/M/Oe1DnEWzPQvqq/xPIIkzzzIP7mfCoAjFRvDhg==
 
-"@mdi/js@^6.1.95":
-  version "6.1.95"
-  resolved "https://registry.npmjs.org/@mdi/js/-/js-6.1.95.tgz"
-  integrity sha512-e6ZXoNB9uciA4smHHVkZWyYX/RRZsza8XfLvnOuvdLQttpzRKTqR26jG/COL0o4ES9vbAk9PX5mXTEstg0TCsg==
+"@mdi/js@^6.7.96":
+  version "6.7.96"
+  resolved "https://registry.yarnpkg.com/@mdi/js/-/js-6.7.96.tgz#6cd13ba64eeaf347c857feb3c328d31af3e75876"
+  integrity sha512-vZvhFrNN9LQx+Awu3nU6ESfXXDpRA/CA4mwikzU5g8uf9NpAocK43ecQvVNntwiXlLKpyplas8d4lsfpqjtXLA==
 
 "@microsoft/fetch-event-source@2.0.1":
   version "2.0.1"
