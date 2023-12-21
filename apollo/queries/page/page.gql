@@ -1,8 +1,0 @@
-query page($slug: String) {
-  pages(where: {slug: $slug}, limit:1) {
-    id
-    title,
-    slug,
-    content
-  }
-}

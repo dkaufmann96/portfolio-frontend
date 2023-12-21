@@ -1,5 +1,5 @@
 @import "./variables.scss";
-@charset "UTF-8";
+
 *,
 :after,
 :before {
@@ -350,7 +350,7 @@ strong {
   margin: auto;
 }
 
-.page-text > h1,
+.page-text * h1,
 h2,
 h3,
 h4,
@@ -359,18 +359,18 @@ h6 {
   margin: 25px 0 15px 0;
 }
 
-.page-text > p {
+.page-text * p {
   font-size: 18px;
   margin-top: 30px;
 }
 
-.page-text img {
+.page-text * img {
   border-radius: 4px;
   padding: 5px;
   max-width: 100%;
   height: auto;
 }
 
-.page-text img:hover {
+.page-text * img:hover {
   box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
 }
