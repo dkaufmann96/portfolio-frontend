@@ -1,6 +1,6 @@
 # Work
 
-Here are some projects that are/were developed during my work as a software engineer.
+Here are some projects that were developed during my previous employments as a software engineer.
 
 ## [Advoodle](https://realty.advoodle.com/)
 
