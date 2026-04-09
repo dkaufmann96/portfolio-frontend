@@ -1,0 +1,93 @@
+{
+    "experience": [
+        {
+            "company": "Dynatrace",
+            "location": "Vienna, Austria",
+            "website": "https://www.dynatrace.com/",
+            "roles": [
+                {
+                    "title": "Software Engineer & Team Captain",
+                    "start": "Apr 2025",
+                    "end": "Present",
+                    "description": "Leading a team of engineers as Team Captain while continuing hands-on development. Responsible for team coordination, technical decision-making, and ensuring delivery quality across the sprint cycle.",
+                    "tags": [
+                        "Team Leadership",
+                        "Agile",
+                        "Software Engineering"
+                    ]
+                },
+                {
+                    "title": "Software Engineer & Agile Advocate",
+                    "start": "Mar 2024",
+                    "end": "Apr 2025",
+                    "description": "Championed agile practices across the engineering organisation, facilitating retrospectives, improving workflows, and promoting a culture of continuous improvement alongside regular feature development.",
+                    "tags": [
+                        "Agile Advocacy",
+                        "Process Improvement",
+                        "Software Engineering"
+                    ]
+                },
+                {
+                    "title": "Software Engineer",
+                    "start": "Jan 2024",
+                    "end": "Mar 2024",
+                    "description": "Joined Dynatrace as a software engineer, contributing to feature development and integrating with existing platform services.",
+                    "tags": [
+                        "Software Engineering"
+                    ]
+                }
+            ]
+        },
+        {
+            "company": "World4You Internet Services GmbH",
+            "location": "Vienna, Austria",
+            "website": "https://www.world4you.com/",
+            "roles": [
+                {
+                    "title": "Software Engineer",
+                    "start": "Jul 2023",
+                    "end": "Dec 2023",
+                    "description": "Developed and maintained web hosting platform features, working across frontend and backend systems to improve customer-facing products and internal tooling.",
+                    "tags": [
+                        "PHP",
+                        "Vue.js",
+                        "Docker"
+                    ]
+                }
+            ]
+        },
+        {
+            "company": "Advoodle Legal Tech GmbH",
+            "location": "Vienna, Austria",
+            "website": "https://advoodle.com/",
+            "roles": [
+                {
+                    "title": "Software Engineer",
+                    "start": "Jul 2019",
+                    "end": "Jun 2023",
+                    "description": "Senior full-stack engineer at the founding of this legal tech startup. Built and shaped the core platform enabling users to manage dynamically created contracts - from employment to real estate - including KYC workflows and multi-stakeholder processes. Drove fundamental architecture decisions and mentored junior developers.",
+                    "tags": [
+                        "Vue.js",
+                        "Laravel",
+                        "Docker",
+                        "Full-Stack"
+                    ]
+                }
+            ]
+        }
+    ],
+    "education": [
+        {
+            "institution": "TU Wien - Technical University of Vienna",
+            "degree": "MSc Software Engineering and Internet Computing",
+            "start": "2021",
+            "end": "2026"
+        },
+        {
+            "institution": "TU Wien - Technical University of Vienna",
+            "degree": "BSc Software and Information Engineering",
+            "start": "2017",
+            "end": "2021"
+        }
+    ]
+}
