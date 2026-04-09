@@ -1,0 +1,481 @@
+---
+// Standalone CV page - styled for both browser viewing and PDF export via Playwright
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import profile from '../data/profile.json';
+
+const profileImagePath = join(process.cwd(), 'public', 'profile.jpeg');
+const profileImageB64 = 'data:image/jpeg;base64,' + readFileSync(profileImagePath).toString('base64');
+
+const { experience, education } = profile;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV - Daniel Kaufmann</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --sidebar-bg: #1a2744;
+        --sidebar-text: #e8edf8;
+        --sidebar-muted: #8da0c4;
+        --sidebar-accent: #7fa3f0;
+        --sidebar-border: rgba(255,255,255,0.12);
+        --main-bg: #ffffff;
+        --main-text: #111827;
+        --main-muted: #6b7280;
+        --main-accent: #2d4fa3;
+        --main-border: #e5e7eb;
+        --tag-bg: #eff4ff;
+        --tag-text: #2d4fa3;
+      }
+
+      html, body {
+        background: var(--main-bg);
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 9.5pt;
+        font-weight: 400;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        height: 100%;
+      }
+
+      /* ── Two-column layout ── */
+      .cv {
+        display: grid;
+        grid-template-columns: 210px 1fr;
+        min-height: 100vh;
+      }
+
+      /* ══════════════ SIDEBAR ══════════════ */
+      .sidebar {
+        background: var(--sidebar-bg);
+        color: var(--sidebar-text);
+        padding: 24px 20px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* Photo + name block */
+      .sidebar__hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--sidebar-border);
+      }
+
+      .sidebar__photo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center top;
+        border: 2.5px solid var(--sidebar-accent);
+      }
+
+      .sidebar__name {
+        font-size: 13.5pt;
+        font-weight: 700;
+        line-height: 1.15;
+        color: #ffffff;
+        letter-spacing: -0.3px;
+      }
+
+      .sidebar__title {
+        font-size: 7.5pt;
+        font-weight: 400;
+        color: var(--sidebar-muted);
+        margin-top: 1px;
+        line-height: 1.4;
+      }
+
+      /* Sidebar sections */
+      .sidebar__section {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .sidebar__section-title {
+        font-size: 7pt;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--sidebar-accent);
+        padding-bottom: 5px;
+        border-bottom: 1px solid var(--sidebar-border);
+      }
+
+      /* Contact */
+      .contact-item {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .contact-item a,
+      .contact-item span {
+        font-size: 8pt;
+        color: var(--sidebar-text);
+        text-decoration: none;
+        line-height: 1.5;
+        word-break: break-all;
+      }
+
+      .contact-item a:hover {
+        color: var(--sidebar-accent);
+      }
+
+      .contact-label {
+        font-size: 7pt;
+        color: var(--sidebar-muted);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* Education */
+      .edu-item {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      .edu-degree {
+        font-size: 8.5pt;
+        font-weight: 600;
+        color: var(--sidebar-text);
+        line-height: 1.35;
+      }
+
+      .edu-school {
+        font-size: 7.5pt;
+        color: var(--sidebar-muted);
+      }
+
+      .edu-dates {
+        font-size: 7.5pt;
+        color: var(--sidebar-accent);
+        margin-top: 1px;
+      }
+
+      /* Skills - compact two-column table */
+      .skills-table {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 3px 10px;
+        font-size: 7.5pt;
+      }
+
+      .skills-table .skill-group-title {
+        font-size: 7.5pt;
+        font-weight: 600;
+        color: var(--sidebar-text);
+        white-space: nowrap;
+        padding-top: 1px;
+      }
+
+      .skills-table .skill-list {
+        color: var(--sidebar-muted);
+        line-height: 1.4;
+      }
+
+      .skill-group {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .skill-group + .skill-group {
+        margin-top: 4px;
+      }
+
+      /* Languages */
+      .lang-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 8pt;
+        gap: 8px;
+      }
+
+      .lang-name {
+        color: var(--sidebar-text);
+      }
+
+      .lang-level {
+        font-size: 7pt;
+        color: var(--sidebar-muted);
+      }
+
+      /* ══════════════ MAIN ══════════════ */
+      .main {
+        background: var(--main-bg);
+        color: var(--main-text);
+        padding: 28px 32px 28px 28px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      /* Section */
+      .section-title {
+        font-size: 7pt;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--main-accent);
+        padding-bottom: 5px;
+        border-bottom: 1.5px solid var(--main-accent);
+        margin-bottom: 14px;
+      }
+
+      /* Experience */
+      .employer {
+        margin-bottom: 16px;
+      }
+
+      .employer:last-child {
+        margin-bottom: 0;
+      }
+
+      .employer-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .employer-name {
+        font-size: 11pt;
+        font-weight: 700;
+        color: var(--main-text);
+        letter-spacing: -0.2px;
+      }
+
+      .employer-location {
+        font-size: 8pt;
+        color: var(--main-muted);
+        font-style: italic;
+      }
+
+      .role {
+        position: relative;
+        padding: 0 0 10px 13px;
+        border-left: 2px solid var(--main-border);
+        margin-bottom: 2px;
+      }
+
+      .role:last-child {
+        padding-bottom: 0;
+      }
+
+      /* Dot on the timeline */
+      .role::before {
+        content: '';
+        position: absolute;
+        left: -5px;
+        top: 5px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--main-border);
+        border: 1.5px solid var(--main-bg);
+      }
+
+      .role.current::before {
+        background: var(--main-accent);
+      }
+
+      .role.current {
+        border-left-color: var(--main-accent);
+      }
+
+      .role-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 3px;
+      }
+
+      .role-title {
+        font-size: 9.5pt;
+        font-weight: 600;
+        color: var(--main-text);
+      }
+
+      .role-dates {
+        font-size: 8pt;
+        color: var(--main-muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .role-desc {
+        font-size: 8.5pt;
+        color: var(--main-muted);
+        line-height: 1.5;
+        margin-bottom: 5px;
+      }
+
+      .role-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+      }
+
+      .tag {
+        font-size: 7pt;
+        font-weight: 500;
+        padding: 1px 6px;
+        border-radius: 100px;
+        background: var(--tag-bg);
+        color: var(--tag-text);
+        border: 1px solid #c7d7fb;
+      }
+
+      @media print {
+        html, body { height: 297mm; }
+
+        .cv { min-height: 297mm; }
+
+        .sidebar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+
+        a { text-decoration: none !important; color: inherit !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cv">
+
+      <!-- ══ SIDEBAR ══ -->
+      <aside class="sidebar">
+
+        <div class="sidebar__hero">
+          <img src={profileImageB64} alt="Daniel Kaufmann" class="sidebar__photo" />
+          <div>
+            <div class="sidebar__name">Daniel Kaufmann</div>
+            <div class="sidebar__title">Software Engineer &amp;<br/>Team Captain</div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="sidebar__section">
+          <div class="sidebar__section-title">Contact</div>
+
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <a href="mailto:contact@danielkaufmann.at">contact@danielkaufmann.at</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Location</span>
+            <span>Vienna, Austria</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Website</span>
+            <a href="https://danielkaufmann.at">danielkaufmann.at</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">GitHub</span>
+            <a href="https://github.com/dkaufmann96">github.com/dkaufmann96</a>
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div class="sidebar__section">
+          <div class="sidebar__section-title">Education</div>
+          {education.map(edu => (
+            <div class="edu-item">
+              <div class="edu-degree">{edu.degree}</div>
+              <div class="edu-school">{edu.institution}</div>
+              <div class="edu-dates">{edu.start} – {edu.end}</div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Skills -->
+        <div class="sidebar__section">
+          <div class="sidebar__section-title">Skills</div>
+          <div class="skills-table">
+            <span class="skill-group-title">Frontend</span>
+            <span class="skill-list">React, Vue.js, Angular, Astro, HTML/CSS</span>
+            <span class="skill-group-title">Backend</span>
+            <span class="skill-list">Deno, Laravel (PHP), Node.js</span>
+            <span class="skill-group-title">AI & Agents</span>
+            <span class="skill-list">GitHub Copilot, LangChain, MCP, Agent Skills</span>
+            <span class="skill-group-title">Cloud</span>
+            <span class="skill-list">AWS, Azure</span>
+            <span class="skill-group-title">Databases</span>
+            <span class="skill-list">PostgreSQL, MySQL, Redis</span>
+            <span class="skill-group-title">Infrastructure</span>
+            <span class="skill-list">Docker, Git, CI/CD</span>
+            <span class="skill-group-title">Languages</span>
+            <span class="skill-list">TypeScript, PHP, Python</span>
+            <span class="skill-group-title">Practices</span>
+            <span class="skill-list">Agile / Scrum, Team Leadership, Mentoring</span>
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="sidebar__section">
+          <div class="sidebar__section-title">Languages</div>
+          <div class="lang-item">
+            <span class="lang-name">German</span>
+            <span class="lang-level">Native</span>
+          </div>
+          <div class="lang-item">
+            <span class="lang-name">English</span>
+            <span class="lang-level">Fluent</span>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- ══ MAIN ══ -->
+      <main class="main">
+
+        <section>
+          <h2 class="section-title">Experience</h2>
+          {experience.map(employer => (
+            <div class="employer">
+              <div class="employer-header">
+                <span class="employer-name">{employer.company}</span>
+                <span class="employer-location">{employer.location}</span>
+              </div>
+              {employer.roles.map((role, i) => (
+                <div class={`role${i === 0 && role.end === 'Present' ? ' current' : ''}`}>
+                  <div class="role-header">
+                    <div class="role-title">{role.title}</div>
+                    <div class="role-dates">{role.start} – {role.end}</div>
+                  </div>
+                  <p class="role-desc">{role.description}</p>
+                  <div class="role-tags">
+                    {role.tags.map(tag => <span class="tag">{tag}</span>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </section>
+
+      </main>
+    </div>
+  </body>
+</html>

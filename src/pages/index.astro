@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Daniel Kaufmann" description="Software Engineer & Team Captain at Dynatrace">
+  <section class="flex flex-col gap-10">
+    <div>
+      <h1 class="text-3xl sm:text-4xl font-semibold text-text mb-3">
+        Hey, I'm Daniel <span class="wave">👋</span>
+      </h1>
+      <p class="text-muted text-lg font-medium mb-6">Software Engineer & Team Captain at Dynatrace</p>
+      <div class="flex flex-col gap-4 text-text/80 max-w-2xl">
+        <p>
+          I'm a software engineer and team lead based in Vienna, Austria. At <a href="https://www.dynatrace.com/" target="_blank" rel="noopener noreferrer">Dynatrace</a> I lead a team of engineers and balance hands-on development with team coordination, technical decision-making, and a focus on helping people do their best work.
+        </p>
+        <p>
+          I work across the full stack with React, TypeScript, and Deno, and I integrate AI tooling into everyday engineering workflows. I care about shipping quality software and about the processes and culture that make that sustainable.
+        </p>
+        <p>
+          I hold a master's degree in Software Engineering and Internet Computing from TU Wien. I'm passionate about open-source - this site is
+          <a href="https://github.com/dkaufmann96/portfolio-frontend" target="_blank" rel="noopener noreferrer">open on GitHub</a>,
+          and more of my work lives on
+          <a href="https://gitlab.com/dkaufmann96" target="_blank" rel="noopener noreferrer">GitLab</a> and
+          <a href="https://github.com/dkaufmann96" target="_blank" rel="noopener noreferrer">GitHub</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <a
+        href="/experience"
+        class="inline-flex items-center gap-2 bg-accent text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-accent-hover transition-colors"
+      >
+        View Experience
+      </a>
+      <a
+        href="/projects"
+        class="inline-flex items-center gap-2 border border-border text-text text-sm font-medium px-4 py-2 rounded-lg hover:border-accent hover:text-accent transition-colors"
+      >
+        See Projects
+      </a>
+      <a
+        href="mailto:contact@danielkaufmann.at"
+        class="inline-flex items-center gap-2 border border-border text-text text-sm font-medium px-4 py-2 rounded-lg hover:border-accent hover:text-accent transition-colors"
+      >
+        Get in Touch
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .wave {
+    display: inline-block;
+    animation: wave 2.5s infinite;
+    transform-origin: 70% 70%;
+  }
+
+  @keyframes wave {
+    0%, 60%, 100% { transform: rotate(0deg); }
+    10%, 30% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+  }
+</style>

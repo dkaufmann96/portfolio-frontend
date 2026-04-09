@@ -1,0 +1,123 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = 'Daniel Kaufmann', description = 'Software Engineer & Team Captain at Dynatrace' } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/experience', label: 'Experience' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/cv.pdf', label: 'CV', external: true },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <ClientRouter />
+  </head>
+  <body class="bg-bg text-text min-h-screen flex flex-col">
+    <div class="max-w-3xl mx-auto w-full px-6 py-12 flex-1">
+      <header class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-16">
+        <a href="/" class="flex-shrink-0">
+          <img
+            src="/profile.jpeg"
+            alt="Daniel Kaufmann"
+            width="72"
+            height="72"
+            class="rounded-full w-[72px] h-[72px] object-cover ring-2 ring-accent/50 ring-offset-2 ring-offset-bg"
+          />
+        </a>
+        <div class="flex flex-col gap-3 w-full">
+          <a href="/" class="text-text font-semibold text-xl leading-none hover:text-accent transition-colors">
+            Daniel Kaufmann
+          </a>
+          <nav class="flex flex-wrap gap-x-5 gap-y-1">
+            {navLinks.map(link => {
+              const isActive = !link.external && (
+                link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href)
+              );
+              return (
+                <a
+                  href={link.href}
+                  target={link.external ? '_blank' : undefined}
+                  rel={link.external ? 'noopener noreferrer' : undefined}
+                  class={`text-sm font-medium uppercase tracking-widest transition-colors ${
+                    isActive ? 'text-accent' : 'text-muted hover:text-text'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+    </div>
+
+    <footer class="border-t border-border mt-16">
+      <div class="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span class="text-muted text-sm">© {new Date().getFullYear()} Daniel Kaufmann</span>
+        <div class="flex gap-5">
+          <a
+            href="https://github.com/dkaufmann96"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted hover:text-text text-sm transition-colors"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://gitlab.com/dkaufmann96"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-muted hover:text-text text-sm transition-colors"
+          >
+            GitLab
+          </a>
+          <a
+            href="mailto:contact@danielkaufmann.at"
+            class="text-muted hover:text-text text-sm transition-colors"
+          >
+            Email
+          </a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<script>
+  // Re-apply active nav state after client-side navigation (header is persisted)
+  function updateNav() {
+    const path = window.location.pathname;
+    document.querySelectorAll('header nav a').forEach((link) => {
+      const href = link.getAttribute('href');
+      const isActive = href === '/' ? path === '/' : path.startsWith(href ?? '');
+      link.classList.toggle('text-accent', isActive);
+      link.classList.toggle('text-muted', !isActive);
+    });
+  }
+  document.addEventListener('astro:page-load', updateNav);
+</script>

@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const projects = [
+  {
+    name: 'Vienna Districts',
+    url: 'https://vienna-districts.danielkaufmann.at/',
+    github: 'https://github.com/dkaufmann96/vienna-districts',
+    description:
+      'An interactive map allowing users to explore the districts of Vienna. Includes a quiz mode where users can test their knowledge of Viennese district locations.',
+    image: '/vienna_districts.png',
+    imageAlt: 'Vienna Districts project screenshot',
+    tags: ['Vue.js'],
+  },
+  {
+    name: 'JWT-Brute',
+    url: 'https://github.com/dkaufmann96/jwt-brute',
+    github: 'https://github.com/dkaufmann96/jwt-brute',
+    description:
+      'A CLI tool to crack the signing key of a JSON Web Token using a multi-core brute-force approach. Feasible for keys up to ~5 characters depending on available hardware. For educational purposes only.',
+    image: '/jwt_brute.gif',
+    imageAlt: 'JWT-Brute demo',
+    tags: ['Python 3', 'Cryptography', 'CLI'],
+  },
+];
+---
+
+<BaseLayout title="Projects - Daniel Kaufmann" description="Personal open-source projects by Daniel Kaufmann">
+  <section>
+    <h1 class="text-3xl font-semibold mb-2">Projects</h1>
+    <p class="text-muted mb-12">Personal open-source work.</p>
+
+    <div class="flex flex-col gap-8">
+      {projects.map((project) => (
+        <div class="card group hover:border-accent/40 transition-colors">
+          <div class="flex flex-col sm:flex-row gap-6">
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="sm:w-48 flex-shrink-0"
+            >
+              <img
+                src={project.image}
+                alt={project.imageAlt}
+                class="rounded-lg w-full h-auto object-cover border border-border group-hover:border-accent/30 transition-colors"
+              />
+            </a>
+            <div class="flex flex-col justify-between gap-4">
+              <div>
+                <div class="flex items-center gap-3 mb-2 flex-wrap">
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-lg font-semibold text-text hover:text-accent transition-colors"
+                  >
+                    {project.name}
+                  </a>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs text-muted hover:text-accent transition-colors border border-border rounded-full px-2 py-0.5"
+                  >
+                    GitHub
+                  </a>
+                </div>
+                <p class="text-text/75 text-sm leading-relaxed">{project.description}</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                {project.tags.map(tag => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

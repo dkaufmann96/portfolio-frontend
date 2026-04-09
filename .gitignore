@@ -2,13 +2,15 @@
 
 # dependencies
 /node_modules
-/public
 
 # testing
 /coverage
 
 # production
 /build
+/dist
+/.astro
+/.playwright-mcp
 
 # misc
 .DS_Store

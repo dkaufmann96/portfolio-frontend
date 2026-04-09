@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-border: #27272a;
+  --color-text: #e4e4e7;
+  --color-muted: #71717a;
+  --color-accent: #6188e0;
+  --color-accent-hover: #7b9de8;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #0a0a0a;
+    color: #e4e4e7;
+    scrollbar-gutter: stable;
+    overflow-y: scroll;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: #6188e0;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  a:hover {
+    color: #7b9de8;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    line-height: 1.2;
+    color: #e4e4e7;
+  }
+
+  p {
+    line-height: 1.75;
+  }
+}
+
+@layer components {
+  .tag {
+    @apply inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-accent/10 text-accent border border-accent/20;
+  }
+
+  .card {
+    @apply bg-surface border border-border rounded-xl p-6;
+  }
+}
+
+/* Kill all browser View Transition API animations for instant, shift-free SPA navigation */
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation: none !important;
+  animation-duration: 0s !important;
+}

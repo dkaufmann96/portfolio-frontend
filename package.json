@@ -1,12 +1,18 @@
 {
   "scripts": {
-    "pages:dev": "vitepress dev pages",
-    "pages:build": "vitepress build pages",
-    "pages:preview": "vitepress preview pages"
+    "dev": "astro dev",
+    "build": "astro build && node scripts/generate-cv.js",
+    "build:site": "astro build",
+    "generate:cv": "node scripts/generate-cv.js",
+    "preview": "astro preview"
+  },
+  "type": "module",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.5",
+    "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
-    "sass": "^1.69.5",
-    "vitepress": "^1.0.0-rc.32",
-    "vue": "^3.3.11"
+    "playwright": "^1.59.1"
   }
 }

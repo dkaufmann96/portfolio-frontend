@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import profile from '../data/profile.json';
+
+const experience = profile.experience;
+---
+
+<BaseLayout title="Experience - Daniel Kaufmann" description="Software engineering career history">
+  <section>
+    <h1 class="text-3xl font-semibold mb-2">Experience</h1>
+    <p class="text-muted mb-12">My professional journey as a software engineer.</p>
+
+    <div class="flex flex-col gap-12">
+      {experience.map((employer) => (
+        <div>
+          <div class="flex items-start justify-between mb-6 gap-4">
+            <div>
+              <a
+                href={employer.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xl font-semibold text-text hover:text-accent transition-colors"
+              >
+                {employer.company}
+              </a>
+              <p class="text-muted text-sm mt-0.5">{employer.location}</p>
+            </div>
+          </div>
+
+          <div class="relative flex flex-col gap-0">
+            {employer.roles.map((role, i) => (
+              <div class="relative flex gap-5">
+                {/* Timeline spine */}
+                <div class="relative flex flex-col items-center">
+                  <div class={`w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0 z-10 ${i === 0 && role.end === 'Present' ? 'bg-accent' : 'bg-border'}`} />
+                  {i < employer.roles.length - 1 && (
+                    <div class="w-px bg-border flex-1 mt-1 mb-0" style="min-height: 100%;" />
+                  )}
+                </div>
+
+                {/* Role card */}
+                <div class={`card mb-6 flex-1 ${i === 0 && role.end === 'Present' ? 'border-accent/30' : ''}`}>
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+                    <h3 class="font-medium text-text">{role.title}</h3>
+                    <span class="text-xs text-muted whitespace-nowrap">
+                      {role.start} - {role.end}
+                    </span>
+                  </div>
+                  <p class="text-text/75 text-sm leading-relaxed mb-4">{role.description}</p>
+                  <div class="flex flex-wrap gap-2">
+                    {role.tags.map(tag => (
+                      <span class="tag">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
