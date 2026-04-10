@@ -1,15 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const jsonLdPerson = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Daniel Kaufmann",
+  "jobTitle": "Software Engineer & Team Captain",
+  "worksFor": { "@type": "Organization", "name": "Dynatrace", "url": "https://www.dynatrace.com/" },
+  "url": "https://danielkaufmann.at",
+  "sameAs": [
+    "https://github.com/dkaufmann96",
+    "https://gitlab.com/dkaufmann96"
+  ],
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "TU Wien" },
+  "knowsAbout": ["React", "TypeScript", "Deno", "AI Tooling", "Team Leadership"]
+});
 ---
 
 <BaseLayout title="Daniel Kaufmann" description="Software Engineer & Team Captain at Dynatrace">
-  <section class="flex flex-col gap-10">
+  <section class="flex flex-col gap-10 relative overflow-hidden">
     <div>
-      <h1 class="text-3xl sm:text-4xl font-semibold text-text mb-3">
-        Hey, I'm Daniel <span class="wave">👋</span>
+      <h1 class="text-3xl sm:text-4xl font-semibold text-text mb-3" aria-label="Hey, I'm Daniel" transition:name="page-heading">
+        <span id="typewriter-text">Hey, I'm Daniel</span> <span class="wave" aria-hidden="true">👋</span>
       </h1>
-      <p class="text-muted text-lg font-medium mb-6">Software Engineer & Team Captain at Dynatrace</p>
-      <div class="flex flex-col gap-4 text-text/80 max-w-2xl">
+      <p class="text-muted text-lg font-medium mb-6" id="hero-subtitle">Software Engineer & Team Captain at Dynatrace</p>
+      <div class="flex flex-col gap-4 text-text/80 max-w-2xl" id="hero-body">
         <p>
           I'm a software engineer and team lead based in Vienna, Austria. At <a href="https://www.dynatrace.com/" target="_blank" rel="noopener noreferrer">Dynatrace</a> I lead a team of engineers and balance hands-on development with team coordination, technical decision-making, and a focus on helping people do their best work.
         </p>
@@ -47,6 +62,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </a>
     </div>
   </section>
+
+  <script type="application/ld+json" set:html={jsonLdPerson} />
 </BaseLayout>
 
 <style>
@@ -63,4 +80,72 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     40% { transform: rotate(-4deg); }
     50% { transform: rotate(10deg); }
   }
+
+  /* Typewriter cursor */
+  .typewriter-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1em;
+    background: var(--color-accent, #6188e0);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.8s step-end infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* Fade-in for body/subtitle */
+  .hero-fade-in {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .hero-fade-in.visible {
+    opacity: 1;
+  }
 </style>
+
+<script>
+  function initTypewriter() {
+    const el = document.getElementById('typewriter-text');
+    const subtitle = document.getElementById('hero-subtitle');
+    const body = document.getElementById('hero-body');
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || (window as any).__typewriterPlayed) return;
+
+    const fullText = el.textContent || '';
+    el.textContent = '';
+
+    // Add cursor
+    const cursor = document.createElement('span');
+    cursor.className = 'typewriter-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+    el.parentElement?.appendChild(cursor);
+
+    // Fade subtitle and body
+    subtitle?.classList.add('hero-fade-in');
+    body?.classList.add('hero-fade-in');
+
+    let i = 0;
+    function type() {
+      if (i < fullText.length) {
+        el!.textContent = fullText.slice(0, i + 1);
+        i++;
+        setTimeout(type, 50 + Math.random() * 30);
+      } else {
+        // Done typing — fade in rest
+        cursor.remove();
+        subtitle?.classList.add('visible');
+        setTimeout(() => body?.classList.add('visible'), 200);
+        (window as any).__typewriterPlayed = true;
+      }
+    }
+
+    // Small delay before starting
+    setTimeout(type, 400);
+  }
+
+  document.addEventListener('astro:page-load', initTypewriter);
+</script>

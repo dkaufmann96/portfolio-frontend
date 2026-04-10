@@ -27,13 +27,13 @@ const projects = [
 
 <BaseLayout title="Projects - Daniel Kaufmann" description="Personal open-source projects by Daniel Kaufmann">
   <section>
-    <h1 class="text-3xl font-semibold mb-2">Projects</h1>
+    <h1 class="text-3xl font-semibold mb-2" transition:name="page-heading">Projects</h1>
     <p class="text-muted mb-12">Personal open-source work.</p>
 
     <div class="flex flex-col gap-8">
       {projects.map((project) => (
-        <div class="card group hover:border-accent/40 transition-colors">
-          <div class="flex flex-col sm:flex-row gap-6">
+        <div class="tilt-card card group hover:border-accent/40 transition-colors" style="perspective: 800px;">
+          <div class="tilt-inner flex flex-col sm:flex-row gap-6" style="transition: transform 0.15s ease-out; transform-style: preserve-3d;">
             <a
               href={project.url}
               target="_blank"
@@ -44,6 +44,7 @@ const projects = [
                 src={project.image}
                 alt={project.imageAlt}
                 class="rounded-lg w-full h-auto object-cover border border-border group-hover:border-accent/30 transition-colors"
+                style="transform: translateZ(20px);"
               />
             </a>
             <div class="flex flex-col justify-between gap-4">
@@ -75,8 +76,60 @@ const projects = [
               </div>
             </div>
           </div>
+          <div class="tilt-glare" aria-hidden="true" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;border-radius:inherit;opacity:0;transition:opacity 0.15s;background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 80%);"></div>
         </div>
       ))}
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .tilt-card {
+    position: relative;
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  function initTilt() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+    if (prefersReducedMotion || isTouch) return;
+
+    document.querySelectorAll('.tilt-card').forEach((card) => {
+      const inner = card.querySelector('.tilt-inner') as HTMLElement;
+      const glare = card.querySelector('.tilt-glare') as HTMLElement;
+      if (!inner) return;
+
+      card.addEventListener('mousemove', (e: Event) => {
+        const ev = e as MouseEvent;
+        const rect = (card as HTMLElement).getBoundingClientRect();
+        const x = (ev.clientX - rect.left) / rect.width;
+        const y = (ev.clientY - rect.top) / rect.height;
+        const rotateX = (0.5 - y) * 8;
+        const rotateY = (x - 0.5) * 8;
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        if (glare) {
+          glare.style.opacity = '1';
+          glare.style.background = `linear-gradient(${Math.atan2(y - 0.5, x - 0.5) * 180 / Math.PI + 90}deg, rgba(255,255,255,0.08) 0%, transparent 80%)`;
+        }
+      });
+
+      card.addEventListener('mouseleave', () => {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        if (glare) glare.style.opacity = '0';
+      });
+
+      // Keyboard focus: subtle scale-up
+      card.addEventListener('focusin', () => {
+        inner.style.transform = 'scale(1.01)';
+      });
+      card.addEventListener('focusout', () => {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initTilt);
+</script>

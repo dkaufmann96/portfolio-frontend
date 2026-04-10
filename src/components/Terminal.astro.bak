@@ -1,0 +1,407 @@
+---
+import profile from '../data/profile.json';
+const { experience, skills } = profile;
+---
+
+<!-- Terminal trigger button -->
+<button
+  id="terminal-trigger"
+  class="terminal-trigger-btn"
+  aria-label="Open terminal"
+  title="Open terminal (Ctrl+`)"
+>
+  <span aria-hidden="true">&gt;_</span>
+</button>
+
+<!-- Terminal overlay -->
+<div
+  id="terminal-overlay"
+  class="terminal-overlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Interactive terminal"
+>
+  <div class="terminal-window" id="terminal-window">
+    <div class="terminal-header">
+      <div class="terminal-dots">
+        <button class="dot dot-red" id="terminal-btn-close" title="Close" aria-label="Close terminal"></button>
+        <button class="dot dot-yellow" id="terminal-btn-minimize" title="Minimize" aria-label="Minimize terminal"></button>
+        <button class="dot dot-green" id="terminal-btn-maximize" title="Maximize" aria-label="Maximize terminal"></button>
+      </div>
+      <span class="terminal-title">daniel@portfolio ~ %</span>
+    </div>
+    <div class="terminal-body" id="terminal-body">
+      <div id="terminal-output" aria-live="polite" role="log"></div>
+      <div class="terminal-input-line">
+        <span class="terminal-prompt" aria-hidden="true">$</span>
+        <input
+          type="text"
+          id="terminal-input"
+          class="terminal-input"
+          aria-label="Terminal command input"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .terminal-trigger-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 40;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #141414;
+    border: 1px solid #27272a;
+    color: #71717a;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+  .terminal-trigger-btn:hover,
+  .terminal-trigger-btn:focus-visible {
+    border-color: #22c55e;
+    color: #22c55e;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+    outline: none;
+  }
+
+  .terminal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .terminal-overlay.hidden {
+    display: none;
+  }
+
+  .terminal-window {
+    width: 100%;
+    max-width: 640px;
+    max-height: 80vh;
+    background: #0d0d0d;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #161616;
+    border-bottom: 1px solid #27272a;
+    user-select: none;
+  }
+  .terminal-dots { display: flex; gap: 6px; }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: filter 0.15s;
+  }
+  .dot:hover { filter: brightness(1.1); }
+  .dot:focus-visible { outline: 2px solid #e4e4e7; outline-offset: 2px; }
+  .dot-red    { background: #ff5f57; }
+  .dot-yellow { background: #febc2e; }
+  .dot-green  { background: #28c840; }
+
+  /* macOS-style: show icons on all dots when hovering anywhere over the cluster */
+  .dot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transition: opacity 0.1s;
+    pointer-events: none;
+  }
+  .terminal-dots:hover .dot::before { opacity: 1; }
+  .dot-red::before    { content: '✕'; font-size: 7px; }
+  .dot-yellow::before { content: '−'; font-size: 11px; }
+  .dot-green::before  { content: '⤢'; font-size: 8px; }
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: #71717a;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  /* Minimized: collapse body, show only header */
+  .terminal-window.terminal-minimized .terminal-body { display: none; }
+  .terminal-window.terminal-minimized { max-height: none; }
+
+  /* Maximized: fill viewport */
+  .terminal-window.terminal-maximized {
+    max-width: none;
+    max-height: none;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+  .terminal-window.terminal-maximized .terminal-body { max-height: calc(100vh - 42px); }
+
+  .terminal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #22c55e;
+    min-height: 300px;
+    max-height: 60vh;
+  }
+
+  .terminal-input-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .terminal-prompt { color: #22c55e; font-weight: bold; flex-shrink: 0; }
+  .terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e4e4e7;
+    font-family: inherit;
+    font-size: inherit;
+    caret-color: #22c55e;
+  }
+
+  :global(.term-line) { white-space: pre-wrap; word-break: break-word; }
+  :global(.term-cmd)     { color: #71717a; }
+  :global(.term-accent)  { color: #6188e0; }
+  :global(.term-success) { color: #22c55e; }
+  :global(.term-muted)   { color: #71717a; }
+  :global(.term-error)   { color: #ef4444; }
+</style>
+
+<script define:vars={{ experience, skills }}>
+  // ── Tiny bootstrap (runs immediately, ~200B behaviour) ──────────────────────
+  // The full terminal logic is only initialized on first open.
+  // NOTE: define:vars inlines this script without TS compilation — plain JS only.
+  let openFn = null;
+
+  function lazyOpen() {
+    if (openFn) { openFn(); return; }
+
+    // ── Full terminal initialisation (runs once, on first open) ───────────────
+    const overlay     = document.getElementById('terminal-overlay');
+    const input       = document.getElementById('terminal-input');
+    const output      = document.getElementById('terminal-output');
+    const termWindow  = document.getElementById('terminal-window');
+    const body        = document.getElementById('terminal-body');
+    const btnClose    = document.getElementById('terminal-btn-close');
+    const btnMinimize = document.getElementById('terminal-btn-minimize');
+    const btnMaximize = document.getElementById('terminal-btn-maximize');
+    if (!overlay || !input || !output || !termWindow || !body) return;
+
+    let previousFocus = null;
+    const commandHistory = [];
+    let historyIndex = -1;
+
+    function open() {
+      previousFocus = document.activeElement;
+      overlay.classList.remove('hidden');
+      input.focus();
+      document.body.style.overflow = 'hidden';
+      if (output.children.length === 0) {
+        appendOutput('<span class="term-success">Welcome to Daniel\'s terminal!</span>');
+        appendOutput('<span class="term-muted">Type `help` to see available commands.</span>\n');
+      }
+    }
+
+    openFn = open;
+
+    function close() {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      if (previousFocus) previousFocus.focus();
+    }
+
+    overlay.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key === 'Tab') { e.preventDefault(); input.focus(); }
+    });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    if (btnClose)    btnClose.addEventListener('click', close);
+    if (btnMinimize) btnMinimize.addEventListener('click', () => termWindow.classList.toggle('terminal-minimized'));
+    if (btnMaximize) btnMaximize.addEventListener('click', () => termWindow.classList.toggle('terminal-maximized'));
+
+    function appendOutput(html) {
+      const line = document.createElement('div');
+      line.className = 'term-line';
+      line.innerHTML = html;
+      output.appendChild(line);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    // ── Commands (all inline, no page navigation) ────────────────────────────
+    const commands = {
+      help: () => {
+        appendOutput('<span class="term-accent">Available commands:</span>');
+        appendOutput('  <span class="term-success">whoami</span>       <span class="term-muted">— About me</span>');
+        appendOutput('  <span class="term-success">skills</span>       <span class="term-muted">— Technical skills</span>');
+        appendOutput('  <span class="term-success">experience</span>   <span class="term-muted">— Career history</span>');
+        appendOutput('  <span class="term-success">projects</span>     <span class="term-muted">— Open source work</span>');
+        appendOutput('  <span class="term-success">contact</span>      <span class="term-muted">— Contact info</span>');
+        appendOutput('  <span class="term-success">cat resume</span>   <span class="term-muted">— Download my CV</span>');
+        appendOutput('  <span class="term-success">clear</span>        <span class="term-muted">— Clear terminal</span>');
+        appendOutput('');
+      },
+
+      whoami: () => {
+        appendOutput('<span class="term-accent">Daniel Kaufmann</span>');
+        appendOutput('Software Engineer & Team Captain at Dynatrace');
+        appendOutput('Based in Vienna, Austria 🇦🇹');
+        appendOutput('MSc Software Engineering & Internet Computing @ TU Wien');
+        appendOutput('');
+        appendOutput('<span class="term-muted">Full-stack engineer passionate about React, TypeScript,</span>');
+        appendOutput('<span class="term-muted">Deno, AI tooling, and building teams that ship quality software.</span>');
+        appendOutput('');
+      },
+
+      skills: () => {
+        const byCategory = {};
+        skills.forEach((s) => {
+          (byCategory[s.category] ??= []).push(s);
+        });
+        appendOutput('<span class="term-accent">Technical Skills</span>');
+        appendOutput('');
+        for (const [cat, items] of Object.entries(byCategory)) {
+          const bar = items.map(s => s.name).join(' · ');
+          appendOutput(`  <span class="term-success">${cat.padEnd(12)}</span>${bar}`);
+        }
+        appendOutput('');
+      },
+
+      experience: () => {
+        appendOutput('<span class="term-accent">Experience</span>');
+        appendOutput('');
+        experience.forEach((emp) => {
+          appendOutput(`<span class="term-success">${emp.company}</span>  <span class="term-muted">${emp.location}</span>`);
+          emp.roles.forEach((role) => {
+            appendOutput(`  <span class="term-accent">${role.title}</span>  <span class="term-muted">${role.start} – ${role.end}</span>`);
+            appendOutput(`  ${role.description}`);
+            appendOutput(`  <span class="term-muted">Stack: ${role.tags.join(', ')}</span>`);
+            appendOutput('');
+          });
+        });
+      },
+
+      projects: () => {
+        appendOutput('<span class="term-accent">Projects</span>');
+        appendOutput('');
+        appendOutput('<span class="term-success">Vienna Districts</span>  <span class="term-muted">https://github.com/dkaufmann96/vienna-districts</span>');
+        appendOutput('  Interactive map of Vienna\'s districts with a quiz mode.');
+        appendOutput('  <span class="term-muted">Stack: Vue.js</span>');
+        appendOutput('');
+        appendOutput('<span class="term-success">JWT-Brute</span>  <span class="term-muted">https://github.com/dkaufmann96/jwt-brute</span>');
+        appendOutput('  CLI tool to crack JWT signing keys via multi-core brute-force.');
+        appendOutput('  <span class="term-muted">Stack: Python 3, Cryptography — educational purposes only</span>');
+        appendOutput('');
+      },
+
+      contact: () => {
+        appendOutput('<span class="term-accent">Contact</span>');
+        appendOutput('');
+        appendOutput('  <span class="term-success">Email</span>    contact@danielkaufmann.at');
+        appendOutput('  <span class="term-success">GitHub</span>   github.com/dkaufmann96');
+        appendOutput('  <span class="term-success">GitLab</span>   gitlab.com/dkaufmann96');
+        appendOutput('');
+      },
+
+      'cat resume': () => {
+        appendOutput('<span class="term-muted">Opening cv.pdf in a new tab...</span>');
+        appendOutput('');
+        window.open('/cv.pdf', '_blank', 'noopener');
+      },
+
+      clear: () => { output.innerHTML = ''; },
+    };
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const cmd = input.value.trim().toLowerCase();
+        appendOutput(`<span class="term-cmd">$ ${input.value}</span>`);
+        input.value = '';
+        if (cmd) { commandHistory.push(cmd); historyIndex = commandHistory.length; }
+        if (!cmd) return;
+        const handler = commands[cmd];
+        if (handler) {
+          handler();
+        } else {
+          appendOutput(`<span class="term-error">command not found: ${cmd}</span>`);
+          appendOutput('<span class="term-muted">Type `help` for available commands.</span>');
+          appendOutput('');
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (historyIndex > 0) { historyIndex--; input.value = commandHistory[historyIndex]; }
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (historyIndex < commandHistory.length - 1) { historyIndex++; input.value = commandHistory[historyIndex]; }
+        else { historyIndex = commandHistory.length; input.value = ''; }
+      }
+    });
+
+    body.addEventListener('click', () => input.focus());
+    open();
+  }
+
+  // ── Wire up triggers ────────────────────────────────────────────────────────
+  // Use event delegation on document so listeners survive DOM swaps caused by
+  // Astro's ClientRouter view-transitions. The guard ensures listeners are only
+  // added once; openFn is reset on each page-load so stale DOM refs are dropped.
+  function attachTriggers() {
+    if (window.__terminalTriggersAttached) return;
+    window.__terminalTriggersAttached = true;
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('#terminal-trigger')) lazyOpen();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === '`') { e.preventDefault(); lazyOpen(); }
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    openFn = null; // drop stale DOM refs; fresh ones captured on next open
+    attachTriggers();
+  });
+</script>

@@ -97,5 +97,107 @@
             "start": "2017",
             "end": "2021"
         }
+    ],
+    "skills": [
+        {
+            "name": "React",
+            "category": "Frontend",
+            "level": 5
+        },
+        {
+            "name": "TypeScript",
+            "category": "Frontend",
+            "level": 5
+        },
+        {
+            "name": "Vue.js",
+            "category": "Frontend",
+            "level": 4
+        },
+        {
+            "name": "HTML/CSS",
+            "category": "Frontend",
+            "level": 5
+        },
+        {
+            "name": "Tailwind CSS",
+            "category": "Frontend",
+            "level": 4
+        },
+        {
+            "name": "Deno",
+            "category": "Backend",
+            "level": 4
+        },
+        {
+            "name": "Node.js",
+            "category": "Backend",
+            "level": 4
+        },
+        {
+            "name": "Laravel",
+            "category": "Backend",
+            "level": 3
+        },
+        {
+            "name": "PHP",
+            "category": "Backend",
+            "level": 3
+        },
+        {
+            "name": "Python",
+            "category": "Languages",
+            "level": 3
+        },
+        {
+            "name": "Java",
+            "category": "Languages",
+            "level": 3
+        },
+        {
+            "name": "JavaScript",
+            "category": "Languages",
+            "level": 5
+        },
+        {
+            "name": "Docker",
+            "category": "DevOps",
+            "level": 4
+        },
+        {
+            "name": "Git",
+            "category": "DevOps",
+            "level": 5
+        },
+        {
+            "name": "CI/CD",
+            "category": "DevOps",
+            "level": 4
+        },
+        {
+            "name": "AI Tooling",
+            "category": "Tools",
+            "level": 4
+        },
+        {
+            "name": "LangChain",
+            "category": "Tools",
+            "level": 3
+        },
+        {
+            "name": "MCP",
+            "category": "Tools",
+            "level": 3
+        },
+        {
+            "name": "Agile/Scrum",
+            "category": "Leadership",
+            "level": 5
+        },
+        {
+            "name": "Team Leadership",
+            "category": "Leadership",
+            "level": 4
+        }
     ]
 }

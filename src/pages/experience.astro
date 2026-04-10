@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SkillConstellation from '../components/SkillConstellation.astro';
 import profile from '../data/profile.json';
 
 const experience = profile.experience;
@@ -7,12 +8,12 @@ const experience = profile.experience;
 
 <BaseLayout title="Experience - Daniel Kaufmann" description="Software engineering career history">
   <section>
-    <h1 class="text-3xl font-semibold mb-2">Experience</h1>
+    <h1 class="text-3xl font-semibold mb-2" transition:name="page-heading">Experience</h1>
     <p class="text-muted mb-12">My professional journey as a software engineer.</p>
 
-    <div class="flex flex-col gap-12">
+    <div class="flex flex-col gap-12" id="experience-timeline">
       {experience.map((employer) => (
-        <div>
+        <div class="timeline-employer">
           <div class="flex items-start justify-between mb-6 gap-4">
             <div>
               <a
@@ -29,12 +30,12 @@ const experience = profile.experience;
 
           <div class="relative flex flex-col gap-0">
             {employer.roles.map((role, i) => (
-              <div class="relative flex gap-5">
+              <div class="relative flex gap-5 timeline-role">
                 {/* Timeline spine */}
                 <div class="relative flex flex-col items-center">
-                  <div class={`w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0 z-10 ${i === 0 && role.end === 'Present' ? 'bg-accent' : 'bg-border'}`} />
+                  <div class={`w-2.5 h-2.5 rounded-full mt-1 flex-shrink-0 z-10 timeline-dot ${i === 0 && role.end === 'Present' ? 'bg-accent' : 'bg-border'}`} />
                   {i < employer.roles.length - 1 && (
-                    <div class="w-px bg-border flex-1 mt-1 mb-0" style="min-height: 100%;" />
+                    <div class="timeline-spine w-px bg-border flex-1 mt-1 mb-0" style="min-height: 100%;" />
                   )}
                 </div>
 
@@ -59,5 +60,92 @@ const experience = profile.experience;
         </div>
       ))}
     </div>
+
+    <SkillConstellation />
   </section>
 </BaseLayout>
+
+<style>
+  /* Timeline spine draw animation via GSAP */
+  .timeline-spine {
+    transform-origin: top;
+  }
+  .timeline-dot {
+    transition: transform 0.3s ease;
+  }
+  .timeline-dot.pulse {
+    animation: dot-pulse 1.5s ease-out;
+  }
+  @keyframes dot-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(97, 136, 224, 0.5); }
+    100% { box-shadow: 0 0 0 8px rgba(97, 136, 224, 0); }
+  }
+</style>
+
+<script>
+  async function initScrollAnimations() {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timeline = document.getElementById('experience-timeline');
+    if (!timeline) return;
+
+    const roles = timeline.querySelectorAll('.timeline-role');
+    if (roles.length === 0) return;
+
+    const gsapModule = await import('gsap');
+    const gsap = gsapModule.default || gsapModule.gsap;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    roles.forEach((role, i) => {
+      const card = role.querySelector('.card');
+      const dot = role.querySelector('.timeline-dot');
+      const spine = role.querySelector('.timeline-spine');
+
+      if (prefersReducedMotion) {
+        // Fade only, no translation
+        gsap.from(card, {
+          opacity: 0,
+          duration: 0.3,
+          scrollTrigger: { trigger: role, start: 'top 85%', toggleActions: 'play none none none' },
+        });
+      } else {
+        // Slide + fade from alternating sides
+        const xOffset = i % 2 === 0 ? -30 : 30;
+        gsap.from(card, {
+          opacity: 0,
+          x: xOffset,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: role, start: 'top 85%', toggleActions: 'play none none none' },
+        });
+
+        // Dot scale-in
+        if (dot) {
+          gsap.from(dot, {
+            scale: 0,
+            duration: 0.4,
+            ease: 'back.out(2)',
+            scrollTrigger: { trigger: role, start: 'top 85%', toggleActions: 'play none none none' },
+            onComplete: () => {
+              if ((dot as HTMLElement).classList.contains('bg-accent')) {
+                (dot as HTMLElement).classList.add('pulse');
+              }
+            },
+          });
+        }
+
+        // Spine draw (scale Y from 0)
+        if (spine) {
+          gsap.from(spine, {
+            scaleY: 0,
+            duration: 0.4,
+            ease: 'power1.inOut',
+            scrollTrigger: { trigger: role, start: 'top 85%', toggleActions: 'play none none none' },
+          });
+        }
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initScrollAnimations);
+</script>

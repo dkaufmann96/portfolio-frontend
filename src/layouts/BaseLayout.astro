@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import ParticleBackground from '../components/ParticleBackground.astro';
+import Terminal from '../components/Terminal.astro';
 
 interface Props {
   title?: string;
@@ -17,6 +19,14 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
   { href: '/cv.pdf', label: 'CV', external: true },
 ];
+
+const jsonLdWebsite = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Daniel Kaufmann",
+  "url": "https://danielkaufmann.at",
+  "description": description,
+});
 ---
 
 <!DOCTYPE html>
@@ -31,11 +41,14 @@ const navLinks = [
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script type="application/ld+json" set:html={jsonLdWebsite} />
     <ClientRouter />
   </head>
   <body class="bg-bg text-text min-h-screen flex flex-col">
-    <div class="max-w-3xl mx-auto w-full px-6 py-12 flex-1">
-      <header class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-16">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <ParticleBackground />
+    <div class="max-w-3xl mx-auto w-full px-6 py-12 flex-1 relative z-10">
+      <header class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-16" transition:name="site-header" transition:animate="none">
         <a href="/" class="flex-shrink-0">
           <img
             src="/profile.jpeg"
@@ -43,13 +56,14 @@ const navLinks = [
             width="72"
             height="72"
             class="rounded-full w-[72px] h-[72px] object-cover ring-2 ring-accent/50 ring-offset-2 ring-offset-bg"
+            transition:name="profile-photo"
           />
         </a>
         <div class="flex flex-col gap-3 w-full">
-          <a href="/" class="text-text font-semibold text-xl leading-none hover:text-accent transition-colors">
+          <a href="/" class="text-text font-semibold text-xl leading-none hover:text-accent transition-colors" transition:name="site-name">
             Daniel Kaufmann
           </a>
-          <nav class="flex flex-wrap gap-x-5 gap-y-1">
+          <nav class="flex flex-wrap gap-x-5 gap-y-1" aria-label="Main navigation">
             {navLinks.map(link => {
               const isActive = !link.external && (
                 link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href)
@@ -59,6 +73,7 @@ const navLinks = [
                   href={link.href}
                   target={link.external ? '_blank' : undefined}
                   rel={link.external ? 'noopener noreferrer' : undefined}
+                  aria-current={isActive ? 'page' : undefined}
                   class={`text-sm font-medium uppercase tracking-widest transition-colors ${
                     isActive ? 'text-accent' : 'text-muted hover:text-text'
                   }`}
@@ -71,12 +86,12 @@ const navLinks = [
         </div>
       </header>
 
-      <main>
+      <main id="main-content">
         <slot />
       </main>
     </div>
 
-    <footer class="border-t border-border mt-16">
+    <footer class="border-t border-border mt-16 relative z-10">
       <div class="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
         <span class="text-muted text-sm">© {new Date().getFullYear()} Daniel Kaufmann</span>
         <div class="flex gap-5">
@@ -105,8 +120,12 @@ const navLinks = [
         </div>
       </div>
     </footer>
+
+    <Terminal />
   </body>
 </html>
+
+
 
 <script>
   // Re-apply active nav state after client-side navigation (header is persisted)
@@ -120,4 +139,25 @@ const navLinks = [
     });
   }
   document.addEventListener('astro:page-load', updateNav);
+</script>
+
+<script>
+  // Konami code: ↑↑↓↓←→←→BA
+  const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiIndex = 0;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === KONAMI[konamiIndex]) {
+      konamiIndex++;
+      if (konamiIndex === KONAMI.length) {
+        konamiIndex = 0;
+        import('canvas-confetti').then(({ default: confetti }) => {
+          confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+          setTimeout(() => confetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } }), 200);
+        });
+      }
+    } else {
+      konamiIndex = e.key === KONAMI[0] ? 1 : 0;
+    }
+  });
 </script>

@@ -1,0 +1,187 @@
+<div id="hero-scene-container" aria-hidden="true" role="presentation"></div>
+
+<style>
+  #hero-scene-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  #hero-scene-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  async function initFloatingShapes() {
+    const container = document.getElementById('hero-scene-container');
+    if (!container) return;
+
+    // Skip on reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Check WebGL support
+    const testCanvas = document.createElement('canvas');
+    const gl = testCanvas.getContext('webgl2') || testCanvas.getContext('webgl');
+    if (!gl) return;
+
+    const THREE = await import('three');
+
+    const scene = new THREE.Scene();
+
+    // Wait one frame so the container has real layout dimensions
+    await new Promise<void>(r => requestAnimationFrame(() => r()));
+
+    const cw = container.offsetWidth || window.innerWidth;
+    const ch = container.offsetHeight || window.innerHeight;
+
+    const camera = new THREE.PerspectiveCamera(60, cw / ch, 0.1, 100);
+    camera.position.z = 5;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(cw, ch);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // Accent color: #6188e0
+    const accentColor = new THREE.Color(0x6188e0);
+    const dimColor = new THREE.Color(0x3a5590);
+
+    // Create floating geometries
+    const geometries = [
+      new THREE.IcosahedronGeometry(0.6, 0),
+      new THREE.TorusKnotGeometry(0.4, 0.15, 64, 8, 2, 3),
+      new THREE.OctahedronGeometry(0.5, 0),
+      new THREE.TorusGeometry(0.4, 0.12, 12, 32),
+      new THREE.IcosahedronGeometry(0.35, 1),
+    ];
+
+    interface FloatingMesh extends THREE.Mesh {
+      userData: {
+        basePos: THREE.Vector3;
+        speed: number;
+        rotSpeed: THREE.Vector3;
+        phase: number;
+      };
+    }
+
+    const meshes: FloatingMesh[] = [];
+    const positions = [
+      [-2.5, 1.2, -1],
+      [2.8, -0.8, -2],
+      [-1.5, -1.5, -1.5],
+      [2, 1.5, -0.5],
+      [0, -2.2, -2.5],
+    ];
+
+    // Detect mobile
+    const isMobile = window.matchMedia('(pointer: coarse)').matches;
+    const meshCount = isMobile ? 3 : geometries.length;
+
+    for (let i = 0; i < meshCount; i++) {
+      // MeshBasicMaterial for wireframe — unaffected by lights, opacity is exact
+      const material = new THREE.MeshBasicMaterial({
+        color: i % 2 === 0 ? accentColor : dimColor,
+        transparent: true,
+        opacity: 0.55,
+        wireframe: true,
+      });
+      const mesh = new THREE.Mesh(geometries[i], material) as FloatingMesh;
+      mesh.position.set(positions[i][0], positions[i][1], positions[i][2]);
+      mesh.userData = {
+        basePos: new THREE.Vector3(positions[i][0], positions[i][1], positions[i][2]),
+        speed: 0.3 + Math.random() * 0.4,
+        rotSpeed: new THREE.Vector3(
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.005,
+        ),
+        phase: Math.random() * Math.PI * 2,
+      };
+      scene.add(mesh);
+      meshes.push(mesh);
+    }
+
+    // Soft ambient + directional light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0x6188e0, 0.8);
+    dirLight.position.set(3, 3, 5);
+    scene.add(dirLight);
+
+    // Mouse tracking for parallax
+    let mouseX = 0;
+    let mouseY = 0;
+    if (!isMobile) {
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+    }
+
+    // Animation
+    const clock = new THREE.Clock();
+    let animId: number;
+
+    function animate() {
+      animId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      for (const mesh of meshes) {
+        const { basePos, speed, rotSpeed, phase } = mesh.userData;
+        // Gentle floating motion
+        mesh.position.x = basePos.x + Math.sin(t * speed + phase) * 0.3;
+        mesh.position.y = basePos.y + Math.cos(t * speed * 0.7 + phase) * 0.3;
+
+        // Mouse parallax
+        mesh.position.x += mouseX * 0.15 * (1 + mesh.position.z * 0.2);
+        mesh.position.y -= mouseY * 0.1 * (1 + mesh.position.z * 0.2);
+
+        // Rotation
+        mesh.rotation.x += rotSpeed.x;
+        mesh.rotation.y += rotSpeed.y;
+        mesh.rotation.z += rotSpeed.z;
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Pause when hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animId);
+        clock.stop();
+      } else {
+        clock.start();
+        animId = requestAnimationFrame(animate);
+      }
+    });
+
+    // Resize
+    const resizeObserver = new ResizeObserver(() => {
+      const w = container.offsetWidth;
+      const h = container.offsetHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    });
+    resizeObserver.observe(container);
+
+    animate();
+
+    // Cleanup on page navigation
+    document.addEventListener('astro:before-swap', () => {
+      cancelAnimationFrame(animId);
+      renderer.dispose();
+      resizeObserver.disconnect();
+    }, { once: true });
+  }
+
+  initFloatingShapes();
+</script>

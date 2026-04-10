@@ -4,15 +4,21 @@
     "build": "astro build && node scripts/generate-cv.js",
     "build:site": "astro build",
     "generate:cv": "node scripts/generate-cv.js",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui"
   },
   "type": "module",
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.1.5",
-    "tailwindcss": "^4.2.2"
+    "canvas-confetti": "^1.9.4",
+    "gsap": "^3.14.2",
+    "tailwindcss": "^4.2.2",
+    "three": "^0.183.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "playwright": "^1.59.1"
   }
 }
