@@ -82,20 +82,71 @@
                     ]
                 }
             ]
+        },
+        {
+            "company": "TU Wien - Technical University of Vienna",
+            "location": "Vienna, Austria",
+            "website": "https://www.tuwien.at/",
+            "roles": [
+                {
+                    "title": "Tutor",
+                    "start": "Sep 2020",
+                    "end": "Aug 2022",
+                    "description": "Tutored students in group projects for two courses: Software Engineering & Project Management, and Requirements Engineering & Specification. Taught Agile methodology, Requirements Engineering, Java Spring, and Angular.",
+                    "tags": [
+                        "Teaching",
+                        "Agile",
+                        "Requirements Engineering",
+                        "Java Spring",
+                        "Angular"
+                    ]
+                }
+            ]
+        },
+        {
+            "company": "Hebotek",
+            "location": "Vienna, Austria",
+            "roles": [
+                {
+                    "title": "Web Developer",
+                    "start": "Oct 2017",
+                    "end": "Jul 2019",
+                    "description": "Development and maintenance of TYPO3 websites and custom projects for various customers.",
+                    "tags": [
+                        "Angular",
+                        "Node.js",
+                        "React",
+                        "Laravel",
+                        "TYPO3"
+                    ]
+                }
+            ]
         }
     ],
     "education": [
         {
             "institution": "TU Wien - Technical University of Vienna",
-            "degree": "MSc Software Engineering and Internet Computing",
+            "degree": "Dipl.-Ing. Software Engineering and Internet Computing",
             "start": "2021",
             "end": "2026"
         },
         {
+            "institution": "Københavns Universitet - University of Copenhagen",
+            "degree": "Computer Science - Exchange Semester",
+            "start": "Aug 2022",
+            "end": "Feb 2023"
+        },
+        {
             "institution": "TU Wien - Technical University of Vienna",
             "degree": "BSc Software and Information Engineering",
-            "start": "2017",
-            "end": "2021"
+            "start": "Mar 2017",
+            "end": "Feb 2021"
+        },
+        {
+            "institution": "HTL Krems, Dependance Zwettl",
+            "degree": "Information Technology",
+            "start": "2011",
+            "end": "2016"
         }
     ],
     "skills": [

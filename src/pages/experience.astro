@@ -17,9 +17,9 @@ const experience = profile.experience;
           <div class="flex items-start justify-between mb-6 gap-4">
             <div>
               <a
-                href={employer.website}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={employer.website || undefined}
+                target={employer.website ? '_blank' : undefined}
+                rel={employer.website ? 'noopener noreferrer' : undefined}
                 class="text-xl font-semibold text-text hover:text-accent transition-colors"
               >
                 {employer.company}
