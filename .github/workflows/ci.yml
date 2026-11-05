@@ -4,6 +4,7 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -28,7 +29,7 @@ jobs:
         run: npm test
 
       - name: Upload build output
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -38,7 +39,7 @@ jobs:
 
   deploy:
     # Only deploy builds from master that passed the tests
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     needs: build-and-test
     runs-on: ubuntu-24.04
     environment: production
@@ -50,6 +51,13 @@ jobs:
         with:
           name: dist
           path: dist
+
+      - name: Show deploy target
+        run: |
+          if [ -z "${{ vars.FTP_SERVER_DIR }}" ]; then
+            echo "::warning::FTP_SERVER_DIR is not set, deploying to the FTP login root (./). Set it to the web root, e.g. ./public_html/"
+          fi
+          echo "Deploying to: ${{ vars.FTP_SERVER_DIR || './' }}"
 
       - name: Deploy to Hetzner via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
