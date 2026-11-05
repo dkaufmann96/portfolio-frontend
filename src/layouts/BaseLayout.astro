@@ -3,13 +3,14 @@ import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import ParticleBackground from '../components/ParticleBackground.astro';
 import Terminal from '../components/Terminal.astro';
+import profile from '../data/profile.json';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const { title = 'Daniel Kaufmann', description = 'Software Engineer & Team Captain at Dynatrace' } = Astro.props;
+const { title = 'Daniel Kaufmann', description = profile.headline } = Astro.props;
 const currentPath = Astro.url.pathname;
 const siteUrl = Astro.site ?? new URL('https://danielkaufmann.at');
 const canonicalUrl = new URL(currentPath, siteUrl).href;
@@ -61,7 +62,7 @@ const jsonLdWebsite = JSON.stringify({
   <body class="bg-bg text-text min-h-screen flex flex-col">
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <ParticleBackground />
-    <div class="max-w-3xl mx-auto w-full px-6 py-12 flex-1 relative z-10">
+    <div class="max-w-3xl mx-auto w-full px-6 pt-12 pb-12 flex-1 relative z-10">
       <header class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-16" transition:name="site-header" transition:animate="none">
         <a href="/" class="flex-shrink-0">
           <img
@@ -74,10 +75,10 @@ const jsonLdWebsite = JSON.stringify({
           />
         </a>
         <div class="flex flex-col gap-3 w-full">
-          <a href="/" class="text-text font-semibold text-xl leading-none hover:text-accent transition-colors" transition:name="site-name">
+          <a href="/" class="text-text font-semibold text-xl leading-none py-1.5 hover:text-accent transition-colors" transition:name="site-name">
             Daniel Kaufmann
           </a>
-          <nav class="flex flex-wrap gap-x-5 gap-y-1" aria-label="Main navigation">
+          <nav class="flex flex-wrap gap-x-5 -my-1" aria-label="Main navigation">
             {navLinks.map(link => {
               const isActive = !link.external && (
                 link.href === '/' ? currentPath === '/' : currentPath.startsWith(link.href)
@@ -88,7 +89,7 @@ const jsonLdWebsite = JSON.stringify({
                   target={link.external ? '_blank' : undefined}
                   rel={link.external ? 'noopener noreferrer' : undefined}
                   aria-current={isActive ? 'page' : undefined}
-                  class={`text-sm font-medium uppercase tracking-widest transition-colors ${
+                  class={`text-sm font-medium uppercase tracking-widest py-2 px-1 transition-colors ${
                     isActive ? 'text-accent' : 'text-muted hover:text-text'
                   }`}
                 >
@@ -106,14 +107,14 @@ const jsonLdWebsite = JSON.stringify({
     </div>
 
     <footer class="border-t border-border mt-16 relative z-10">
-      <div class="max-w-3xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="max-w-3xl mx-auto px-6 pt-6 pb-24 sm:pb-6 flex flex-col sm:flex-row items-center justify-between gap-3">
         <span class="text-muted text-sm">© {new Date().getFullYear()} Daniel Kaufmann</span>
         <div class="flex gap-5">
           <a
             href="https://github.com/dkaufmann96"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-muted hover:text-text text-sm transition-colors"
+            class="text-muted hover:text-text text-sm py-2 transition-colors"
           >
             GitHub
           </a>
@@ -121,13 +122,13 @@ const jsonLdWebsite = JSON.stringify({
             href="https://gitlab.com/dkaufmann96"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-muted hover:text-text text-sm transition-colors"
+            class="text-muted hover:text-text text-sm py-2 transition-colors"
           >
             GitLab
           </a>
           <a
             href="mailto:contact@danielkaufmann.at"
-            class="text-muted hover:text-text text-sm transition-colors"
+            class="text-muted hover:text-text text-sm py-2 transition-colors"
           >
             Email
           </a>

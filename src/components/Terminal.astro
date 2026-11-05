@@ -1,6 +1,6 @@
 ---
 import profile from '../data/profile.json';
-const { experience, skills } = profile;
+const { experience, skills, headline } = profile;
 ---
 
 <!-- Terminal trigger button -->
@@ -61,7 +61,7 @@ const { experience, skills } = profile;
     border-radius: 12px;
     background: #141414;
     border: 1px solid #27272a;
-    color: #71717a;
+    color: #9a9aa4;
     font-family: Menlo, Monaco, 'SF Mono', 'Courier New', monospace;
     font-size: 14px;
     font-weight: bold;
@@ -245,7 +245,7 @@ const { experience, skills } = profile;
   :global(.term-accent)  { color: #6188e0; }
   :global(.term-success) { color: #22c55e; }
   :global(.term-warn)    { color: #febc2e; }
-  :global(.term-muted)   { color: #71717a; }
+  :global(.term-muted)   { color: #9a9aa4; }
   :global(.term-error)   { color: #ef4444; }
   :global(.term-bold)    { font-weight: 700; }
 
@@ -269,7 +269,7 @@ const { experience, skills } = profile;
   .terminal-window.terminal-maximized .terminal-resize-handle { display: none; }
 </style>
 
-<script define:vars={{ experience, skills }}>
+<script define:vars={{ experience, skills, headline }}>
   var openFn = null;
 
   function lazyOpen() {
@@ -423,7 +423,7 @@ const { experience, skills } = profile;
 
       whoami: function() {
         appendOutput('<span class="term-accent term-bold">Daniel Kaufmann</span>');
-        appendOutput('Software Engineer &amp; Team Captain at Dynatrace');
+        appendOutput(esc(headline));
         appendOutput('Based in Vienna, Austria 🇦🇹');
         appendOutput('MSc Software Engineering &amp; Internet Computing @ TU Wien');
         appendOutput('');

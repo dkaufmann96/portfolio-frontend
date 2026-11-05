@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import profile from '../data/profile.json';
 
 const jsonLdPerson = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Daniel Kaufmann",
-  "jobTitle": "Software Engineer & Team Captain",
+  "jobTitle": "Software Engineer",
   "worksFor": { "@type": "Organization", "name": "Dynatrace", "url": "https://www.dynatrace.com/" },
   "url": "https://danielkaufmann.at",
   "image": "https://danielkaufmann.at/profile.jpeg",
@@ -19,19 +20,19 @@ const jsonLdPerson = JSON.stringify({
 });
 ---
 
-<BaseLayout title="Daniel Kaufmann" description="Software Engineer & Team Captain at Dynatrace">
+<BaseLayout title="Daniel Kaufmann" description={profile.headline}>
   <section class="flex flex-col gap-10 relative overflow-hidden">
     <div>
       <h1 class="text-3xl sm:text-4xl font-semibold text-text mb-3" aria-label="Hey, I'm Daniel" transition:name="page-heading">
         <span id="typewriter-text">Hey, I'm Daniel</span> <span class="wave" aria-hidden="true">👋</span>
       </h1>
-      <p class="text-muted text-lg font-medium mb-6" id="hero-subtitle">Software Engineer & Team Captain at Dynatrace</p>
+      <p class="text-muted text-lg font-medium mb-6" id="hero-subtitle">{profile.headline}</p>
       <div class="flex flex-col gap-4 text-text/80 max-w-2xl" id="hero-body">
         <p>
-          I'm a software engineer and team lead based in Vienna, Austria. At <a href="https://www.dynatrace.com/" target="_blank" rel="noopener noreferrer">Dynatrace</a> I lead a team of engineers and balance hands-on development with team coordination, technical decision-making, and a focus on helping people do their best work.
+          I'm a full-stack software engineer based in Vienna, Austria. At <a href="https://www.dynatrace.com/" target="_blank" rel="noopener noreferrer">Dynatrace</a> I build workflow automation and messaging on the observability platform. Until March 2026 I was also Team Captain, balancing hands-on development with technical decision-making and helping people do their best work.
         </p>
         <p>
-          I work across the full stack with React, TypeScript, and Deno, and I integrate AI tooling into everyday engineering workflows. I care about shipping quality software and about the processes and culture that make that sustainable.
+          I'm strongest in React and TypeScript, with Python on the backend, and I use AI-assisted development daily. I care about shipping quality software and about the processes and culture that make that sustainable.
         </p>
         <p>
           I hold a master's degree in Software Engineering and Internet Computing from TU Wien. I'm passionate about open source. This site is
