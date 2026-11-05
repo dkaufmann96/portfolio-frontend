@@ -30,7 +30,7 @@ jobs:
 
       - name: Upload build output
         if: github.ref == 'refs/heads/master' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: dist
           path: dist
@@ -47,25 +47,33 @@ jobs:
       group: deploy
       cancel-in-progress: false
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v7
         with:
           name: dist
           path: dist
 
       - name: Show deploy target
+        env:
+          FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR }}
         run: |
-          if [ -z "${{ vars.FTP_SERVER_DIR }}" ]; then
+          if [ -z "$FTP_SERVER_DIR" ]; then
             echo "::warning::FTP_SERVER_DIR is not set, deploying to the FTP login root (./). Set it to the web root, e.g. ./public_html/"
           fi
-          echo "Deploying to: ${{ vars.FTP_SERVER_DIR || './' }}"
+          echo "Deploying to: ${FTP_SERVER_DIR:-./}"
 
       - name: Deploy to Hetzner via FTPS
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          local-dir: ./dist/
-          server-dir: ${{ vars.FTP_SERVER_DIR || './' }}
-          state-name: .ftp-deploy-sync-state.json
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ vars.FTP_SERVER_DIR || './' }}
+        run: node scripts/deploy.js
