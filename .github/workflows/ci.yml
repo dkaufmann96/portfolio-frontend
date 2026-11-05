@@ -18,8 +18,14 @@ jobs:
 
       - run: npm ci
 
-      - name: Build site
-        run: npm run build
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Build site and regenerate CV PDF
+        run: npm run generate:cv
+
+      - name: Test
+        run: npm test
 
       - name: Upload build output
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -29,12 +35,6 @@ jobs:
           path: dist
           include-hidden-files: true
           retention-days: 7
-
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-
-      - name: Test
-        run: npm test
 
   deploy:
     # Only deploy builds from master that passed the tests
