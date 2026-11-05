@@ -11,6 +11,9 @@ interface Props {
 
 const { title = 'Daniel Kaufmann', description = 'Software Engineer & Team Captain at Dynatrace' } = Astro.props;
 const currentPath = Astro.url.pathname;
+const siteUrl = Astro.site ?? new URL('https://danielkaufmann.at');
+const canonicalUrl = new URL(currentPath, siteUrl).href;
+const ogImage = new URL('/og-image.png', siteUrl).href;
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -38,9 +41,20 @@ const jsonLdWebsite = JSON.stringify({
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Daniel Kaufmann" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script type="application/ld+json" set:html={jsonLdWebsite} />
     <ClientRouter />
   </head>
