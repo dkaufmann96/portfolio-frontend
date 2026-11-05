@@ -14,6 +14,12 @@
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "DENY"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # HSTS, staged rollout. Browsers cache this, so it cannot be undone quickly:
+  # start at 300 s, then raise to 86400 (1 day), 604800 (1 week), 31536000 (1 year),
+  # waiting for the previous step to run cleanly. includeSubDomains and preload are
+  # deliberately left out: vienna-districts and master-thesis are separate Netlify sites.
+  Header always set Strict-Transport-Security "max-age=300"
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
   # Astro emits content-hashed files under /_astro/
