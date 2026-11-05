@@ -18,6 +18,9 @@ export default defineConfig({
         command: 'npm run build && npm run preview -- --port 4322 --host 127.0.0.1',
         port: 4322,
         reuseExistingServer: true,
+        // Astro 7 detaches `astro preview` when it detects an AI agent, which makes Playwright
+        // think the server crashed. Setting this keeps it running in the foreground.
+        env: { ASTRO_PREVIEW_BACKGROUND: '1' },
         timeout: 120000,
     },
 });
