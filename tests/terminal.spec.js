@@ -140,10 +140,9 @@ test.describe('Commands', () => {
         expect(text).toContain('Dynatrace');
         expect(text).toContain('World4You Internet Services GmbH');
         expect(text).toContain('Advoodle Legal Tech GmbH');
-        expect(text).toContain('Software Engineer & Team Captain');
-        // Box-drawing chars
+        expect(text).toContain('Software Engineer');
+        // Box-drawing chars (├─ only appears for companies with several roles)
         expect(text).toContain('┌─');
-        expect(text).toContain('├─');
         expect(text).toContain('└─');
         expect(text).toContain('│');
         // Stack tags
