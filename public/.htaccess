@@ -1,5 +1,14 @@
 # Apache config for Hetzner webhosting (replaces the Netlify/Cloudflare-style _headers file)
 
+# Force HTTPS and the canonical apex host (single 301 hop)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\.danielkaufmann\.at$ [NC]
+  RewriteRule ^ https://danielkaufmann.at%{REQUEST_URI} [L,R=301]
+</IfModule>
+
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
