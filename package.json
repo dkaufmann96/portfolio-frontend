@@ -4,6 +4,8 @@
     "build": "astro build",
     "generate:cv": "astro build && node scripts/generate-cv.js",
     "preview": "astro preview",
+    "deploy": "npm run generate:cv && npm test && node --env-file-if-exists=.env.deploy scripts/deploy.js",
+    "deploy:dry": "node --env-file-if-exists=.env.deploy scripts/deploy.js --dry-run",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "prepare": "git config core.hooksPath .githooks || true"
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
+    "basic-ftp": "^6.2.6",
     "playwright": "^1.59.1"
   }
 }
