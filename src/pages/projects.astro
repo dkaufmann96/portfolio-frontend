@@ -35,7 +35,7 @@ const projects = [
     <p class="text-muted mb-12">Personal open-source work.</p>
 
     <div class="flex flex-col gap-8">
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <div class="tilt-card card group hover:border-accent/40 transition-colors" style="perspective: 800px;">
           <div class="tilt-inner flex flex-col sm:flex-row gap-6" style="transition: transform 0.15s ease-out; transform-style: preserve-3d;">
             <a
@@ -50,7 +50,8 @@ const projects = [
                   alt={project.imageAlt}
                   width={project.imageWidth}
                   height={project.imageHeight}
-                  loading="lazy"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : undefined}
                   decoding="async"
                   class="rounded-lg w-full h-auto object-cover border border-border group-hover:border-accent/30 transition-colors"
                   style="transform: translateZ(20px);"
@@ -62,7 +63,8 @@ const projects = [
                   width={384}
                   densities={[1, 2]}
                   format="webp"
-                  loading="lazy"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : undefined}
                   class="rounded-lg w-full h-auto object-cover border border-border group-hover:border-accent/30 transition-colors"
                   style="transform: translateZ(20px);"
                 />
