@@ -21,6 +21,11 @@ for (const { path, title } of pages) {
             await expect(page.locator('h1')).toHaveCount(1);
         });
 
+        test('has no anchors without href', async ({ page }) => {
+            await page.goto(path);
+            await expect(page.locator('a:not([href])')).toHaveCount(0);
+        });
+
         test('has no broken internal links or images', async ({ page, request }) => {
             await page.goto(path);
             const hrefs = await page.$$eval('a[href^="/"]', (as) => as.map((a) => a.getAttribute('href')));
