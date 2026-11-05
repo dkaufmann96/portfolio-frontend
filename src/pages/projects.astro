@@ -71,19 +71,21 @@ const projects = [
             <div class="flex flex-col justify-between gap-4">
               <div>
                 <div class="flex items-center gap-3 mb-2 flex-wrap">
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-lg font-semibold text-text hover:text-accent transition-colors"
-                  >
-                    {project.name}
-                  </a>
+                  <h2 class="text-lg font-semibold">
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-text hover:text-accent transition-colors"
+                    >
+                      {project.name}
+                    </a>
+                  </h2>
                   <a
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-xs text-muted hover:text-accent transition-colors border border-border rounded-full px-2 py-0.5"
+                    class="text-xs text-muted hover:text-accent transition-colors border border-border rounded-full px-3 py-1.5"
                   >
                     GitHub
                   </a>

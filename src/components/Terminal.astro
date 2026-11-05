@@ -1,6 +1,6 @@
 ---
 import profile from '../data/profile.json';
-const { experience, skills } = profile;
+const { experience, skills, headline } = profile;
 ---
 
 <!-- Terminal trigger button -->
@@ -269,7 +269,7 @@ const { experience, skills } = profile;
   .terminal-window.terminal-maximized .terminal-resize-handle { display: none; }
 </style>
 
-<script define:vars={{ experience, skills }}>
+<script define:vars={{ experience, skills, headline }}>
   var openFn = null;
 
   function lazyOpen() {
@@ -423,7 +423,7 @@ const { experience, skills } = profile;
 
       whoami: function() {
         appendOutput('<span class="term-accent term-bold">Daniel Kaufmann</span>');
-        appendOutput('Software Engineer &amp; Team Captain at Dynatrace');
+        appendOutput(esc(headline));
         appendOutput('Based in Vienna, Austria 🇦🇹');
         appendOutput('MSc Software Engineering &amp; Internet Computing @ TU Wien');
         appendOutput('');
