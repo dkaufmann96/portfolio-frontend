@@ -8,7 +8,9 @@ import '@fontsource-variable/inter';
 const profileImagePath = join(process.cwd(), 'public', 'profile.jpeg');
 const profileImageB64 = 'data:image/jpeg;base64,' + readFileSync(profileImagePath).toString('base64');
 
-const { experience, education } = profile;
+const { summary, experience } = profile;
+// Secondary school is left off the CV to save space
+const education = profile.education.slice(0, 3);
 ---
 
 <!DOCTYPE html>
@@ -60,10 +62,10 @@ const { experience, education } = profile;
       .sidebar {
         background: var(--sidebar-bg);
         color: var(--sidebar-text);
-        padding: 16px 20px 16px;
+        padding: 12px 20px 8px;
         display: flex;
         flex-direction: column;
-        gap: 11px;
+        gap: 8px;
       }
 
       /* Photo + name block */
@@ -335,6 +337,23 @@ const { experience, education } = profile;
         margin-bottom: 5px;
       }
 
+      .role-highlights {
+        font-size: 8.5pt;
+        color: var(--main-muted);
+        line-height: 1.5;
+        margin: 0 0 6px 14px;
+      }
+
+      .role-highlights li {
+        margin-bottom: 2px;
+      }
+
+      .summary {
+        font-size: 9pt;
+        color: var(--main-text);
+        line-height: 1.55;
+      }
+
       .role-tags {
         display: flex;
         flex-wrap: wrap;
@@ -372,7 +391,7 @@ const { experience, education } = profile;
           <img src={profileImageB64} alt="Daniel Kaufmann" class="sidebar__photo" />
           <div>
             <div class="sidebar__name">Daniel Kaufmann</div>
-            <div class="sidebar__title">Software Engineer &amp;<br/>Team Captain</div>
+            <div class="sidebar__title">Software Engineer<br/>Full-Stack &amp; Observability</div>
           </div>
         </div>
 
@@ -414,22 +433,24 @@ const { experience, education } = profile;
         <div class="sidebar__section">
           <div class="sidebar__section-title">Skills</div>
           <div class="skills-table">
-            <span class="skill-group-title">Frontend</span>
-            <span class="skill-list">React, Vue.js, Angular, Astro, HTML/CSS</span>
-            <span class="skill-group-title">Backend</span>
-            <span class="skill-list">Deno, Laravel (PHP), Node.js</span>
-            <span class="skill-group-title">AI & Agents</span>
-            <span class="skill-list">GitHub Copilot, LangChain, MCP, Agent Skills</span>
-            <span class="skill-group-title">Cloud</span>
-            <span class="skill-list">AWS, Azure</span>
-            <span class="skill-group-title">Databases</span>
-            <span class="skill-list">PostgreSQL, MySQL, Redis</span>
-            <span class="skill-group-title">Infrastructure</span>
-            <span class="skill-list">Docker, Git, CI/CD</span>
             <span class="skill-group-title">Languages</span>
-            <span class="skill-list">TypeScript, PHP, Python</span>
+            <span class="skill-list">TypeScript, Python, JavaScript, PHP, Java</span>
+            <span class="skill-group-title">Frontend</span>
+            <span class="skill-list">React, Vue.js, Angular, HTML/CSS</span>
+            <span class="skill-group-title">Backend</span>
+            <span class="skill-list">Flask, Deno, Node.js, Laravel</span>
+            <span class="skill-group-title">Data</span>
+            <span class="skill-list">MySQL, PostgreSQL</span>
+            <span class="skill-group-title">Integrations</span>
+            <span class="skill-list">Slack, MS Teams, ServiceNow, Ansible, Kubernetes</span>
+            <span class="skill-group-title">DevOps</span>
+            <span class="skill-list">AWS, Azure, Docker, CI/CD, Git</span>
+            <span class="skill-group-title">AI & Agents</span>
+            <span class="skill-list">Claude Code, GitHub Copilot, MCP, LangChain, Agent Skills</span>
+            <span class="skill-group-title">Domain</span>
+            <span class="skill-list">Observability, Workflow Automation, ChatOps</span>
             <span class="skill-group-title">Practices</span>
-            <span class="skill-list">Agile / Scrum, Team Leadership, Mentoring</span>
+            <span class="skill-list">Mentoring, Technical Hiring, Product Collaboration</span>
           </div>
         </div>
 
@@ -452,6 +473,11 @@ const { experience, education } = profile;
       <main class="main">
 
         <section>
+          <h2 class="section-title">Profile</h2>
+          <p class="summary">{summary}</p>
+        </section>
+
+        <section>
           <h2 class="section-title">Experience</h2>
           {experience.map(employer => (
             <div class="employer">
@@ -466,6 +492,11 @@ const { experience, education } = profile;
                     <div class="role-dates">{role.start} – {role.end}</div>
                   </div>
                   <p class="role-desc">{role.description}</p>
+                  {role.highlights && (
+                    <ul class="role-highlights">
+                      {role.highlights.map(h => <li>{h}</li>)}
+                    </ul>
+                  )}
                   <div class="role-tags">
                     {role.tags.map(tag => <span class="tag">{tag}</span>)}
                   </div>

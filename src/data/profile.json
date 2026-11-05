@@ -1,4 +1,5 @@
 {
+    "summary": "Full-stack engineer with 9 years of experience, strongest in React and TypeScript with Python on the backend. Currently building workflow automation and messaging on the Dynatrace observability platform; previously a founding engineer at a legal tech startup. Daily user of AI-assisted development.",
     "experience": [
         {
             "company": "Dynatrace",
@@ -6,42 +7,29 @@
             "website": "https://www.dynatrace.com/",
             "roles": [
                 {
-                    "title": "Software Engineer & Team Captain",
-                    "start": "Apr 2025",
-                    "end": "Present",
-                    "description": "Leading a team of engineers as Team Captain while continuing hands-on development with React, TypeScript, and Deno. Responsible for technical decision-making, delivery quality, and integrating AI tooling, including GitHub Copilot, LangChain, and MCP-based agent skills into the team's engineering workflows.",
-                    "tags": [
-                        "Team Leadership",
-                        "React",
-                        "TypeScript",
-                        "Deno",
-                        "AI Tooling",
-                        "MCP",
-                        "Agile"
-                    ]
-                },
-                {
-                    "title": "Software Engineer & Agile Advocate",
-                    "start": "Mar 2024",
-                    "end": "Apr 2025",
-                    "description": "Championed agile practices across the engineering organisation, facilitating retrospectives, improving workflows, and promoting a culture of continuous improvement. Contributed to feature development using React, TypeScript, and Deno, with early adoption of AI-assisted development tools.",
-                    "tags": [
-                        "Agile Advocacy",
-                        "React",
-                        "TypeScript",
-                        "Deno",
-                        "Process Improvement"
-                    ]
-                },
-                {
                     "title": "Software Engineer",
                     "start": "Jan 2024",
-                    "end": "Mar 2024",
-                    "description": "Joined Dynatrace as a software engineer, onboarding onto a React/TypeScript/Deno stack and contributing to feature development across the platform.",
+                    "end": "Present",
+                    "description": "Full-stack engineer on the Dynatrace observability platform, Team Captain until Mar 2026.",
+                    "highlights": [
+                        "Built 3rd-party integrations for the workflow automation product (React, TypeScript), including Slack, MS Teams, AWS, Azure, Kubernetes, ServiceNow, and Red Hat Ansible, aligning with other teams on shared contracts and driving release and delivery.",
+                        "Developed a platform messaging service in Python and Flask that lets customers interact with Dynatrace directly from Slack and MS Teams (ChatOps), consumed by other teams across the platform.",
+                        "Led creation of a team-internal Claude Code plugin that turns individual agent skills into a shared, reusable library used by all 7 team members; integrated GitHub Copilot, LangChain, and MCP into the team's engineering workflows.",
+                        "As Team Captain, worked with the Product Owner on scoping and priorities, and led hiring: interviewed ~10 candidates, 4 hired."
+                    ],
                     "tags": [
                         "React",
                         "TypeScript",
-                        "Deno"
+                        "Python",
+                        "Flask",
+                        "Deno",
+                        "Workflow Automation",
+                        "Integrations",
+                        "Observability",
+                        "Team Leadership",
+                        "Claude Code",
+                        "AI Tooling",
+                        "MCP"
                     ]
                 }
             ]
@@ -73,7 +61,7 @@
                     "title": "Software Engineer",
                     "start": "Jul 2019",
                     "end": "Jun 2023",
-                    "description": "Founding full-stack engineer at a legal tech startup. Built and shaped the core platform enabling users to manage dynamically created contracts - from employment to real estate - including KYC workflows and multi-stakeholder processes. Drove fundamental architecture decisions and mentored junior developers.",
+                    "description": "Founding full-stack engineer in a team of 4 at a legal tech startup. Built and shaped the core platform enabling users to manage dynamically created contracts - from employment to real estate - including KYC workflows and multi-stakeholder processes. Drove fundamental architecture decisions, including the MySQL data model, and mentored junior developers.",
                     "tags": [
                         "Vue.js",
                         "Laravel",
