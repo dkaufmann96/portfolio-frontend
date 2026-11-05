@@ -364,6 +364,10 @@ const { experience, skills } = profile;
       appendOutput('');
     }
 
+    function esc(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
     function appendOutput(html) {
       var line = document.createElement('div');
       line.className = 'term-line';
@@ -553,7 +557,7 @@ const { experience, skills } = profile;
       if (arg === '..') { cwd = '~'; updatePrompt(); appendOutput(''); return; }
       var target = arg.startsWith('~/') ? arg : (cwd === '~' ? '~/' + arg : cwd + '/' + arg);
       if (vfs[target]) { cwd = target; updatePrompt(); appendOutput(''); }
-      else { appendOutput('<span class="term-error">cd: ' + arg + ': No such file or directory</span>'); appendOutput(''); }
+      else { appendOutput('<span class="term-error">cd: ' + esc(arg) + ': No such file or directory</span>'); appendOutput(''); }
     }
 
     function handleCat(arg) {
@@ -562,10 +566,10 @@ const { experience, skills } = profile;
       var dir = currentDir();
       if (dir && dir.children[arg]) {
         var node = dir.children[arg];
-        if (node.type === 'dir') { appendOutput('<span class="term-error">cat: ' + arg + ': Is a directory</span>'); appendOutput(''); return; }
+        if (node.type === 'dir') { appendOutput('<span class="term-error">cat: ' + esc(arg) + ': Is a directory</span>'); appendOutput(''); return; }
         if (commands[node.cmd]) { commands[node.cmd](); return; }
       }
-      appendOutput('<span class="term-error">cat: ' + arg + ': No such file or directory</span>');
+      appendOutput('<span class="term-error">cat: ' + esc(arg) + ': No such file or directory</span>');
       appendOutput('');
     }
 
@@ -587,7 +591,7 @@ const { experience, skills } = profile;
 
     function handleMan(arg) {
       var page = manPages[arg];
-      if (!page) { appendOutput('<span class="term-error">No manual entry for ' + arg + '</span>'); appendOutput(''); return; }
+      if (!page) { appendOutput('<span class="term-error">No manual entry for ' + esc(arg) + '</span>'); appendOutput(''); return; }
       appendOutput('<span class="term-accent term-bold">PORTFOLIO(1)</span>             Portfolio Manual             <span class="term-accent term-bold">PORTFOLIO(1)</span>');
       appendOutput('');
       appendOutput('<span class="term-bold">NAME</span>');
@@ -619,7 +623,7 @@ const { experience, skills } = profile;
         prefix = prefix.slice(0, i);
       });
       if (prefix.length > val.length) { input.value = prefix; syncCursor(); return; }
-      appendOutput('<span class="term-cmd">' + promptEl.textContent + ' ' + val + '</span>');
+      appendOutput('<span class="term-cmd">' + promptEl.textContent + ' ' + esc(val) + '</span>');
       appendOutput('<span class="term-muted">' + matches.join('  ') + '</span>');
       appendOutput('');
     }
@@ -649,7 +653,7 @@ const { experience, skills } = profile;
       if (e.key === 'Enter') {
         var raw = input.value.trim();
         var cmd = raw.toLowerCase();
-        appendOutput('<span class="term-cmd">' + promptEl.textContent + ' ' + raw + '</span>');
+        appendOutput('<span class="term-cmd">' + promptEl.textContent + ' ' + esc(raw) + '</span>');
         input.value = '';
         syncCursor();
         if (raw) { commandHistory.push(raw); historyIndex = commandHistory.length; }
@@ -661,7 +665,7 @@ const { experience, skills } = profile;
         if (handler) {
           handler();
         } else {
-          appendOutput('<span class="term-error">command not found: ' + raw + '</span>');
+          appendOutput('<span class="term-error">command not found: ' + esc(raw) + '</span>');
           appendOutput('<span class="term-muted">Type <span class="term-accent">help</span> for available commands.</span>');
           appendOutput('');
         }

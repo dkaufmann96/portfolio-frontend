@@ -3,6 +3,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import profile from '../data/profile.json';
+import '@fontsource-variable/inter';
 
 const profileImagePath = join(process.cwd(), 'public', 'profile.jpeg');
 const profileImageB64 = 'data:image/jpeg;base64,' + readFileSync(profileImagePath).toString('base64');
@@ -16,9 +17,6 @@ const { experience, education } = profile;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CV - Daniel Kaufmann</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after {
         box-sizing: border-box;
@@ -43,7 +41,7 @@ const { experience, education } = profile;
 
       html, body {
         background: var(--main-bg);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: 'Inter Variable', 'Inter', system-ui, sans-serif;
         font-size: 9.5pt;
         font-weight: 400;
         line-height: 1.5;

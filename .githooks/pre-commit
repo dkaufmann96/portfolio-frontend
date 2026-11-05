@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Regenerates public/cv.pdf whenever CV-relevant files are part of the commit.
+set -e
+
+if git diff --cached --name-only | grep -qE '^(src/data/profile\.json|src/pages/cv\.astro|public/profile\.jpeg|scripts/generate-cv\.js)$'; then
+  echo "pre-commit: CV sources changed, regenerating public/cv.pdf ..."
+  npm run --silent generate:cv
+  git add public/cv.pdf
+fi

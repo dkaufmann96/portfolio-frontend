@@ -28,3 +28,7 @@ pages/.vitepress/cache/
 pages/.vitepress/dist/
 
 .vscode
+
+# playwright
+/test-results
+/playwright-report

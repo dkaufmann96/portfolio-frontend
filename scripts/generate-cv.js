@@ -6,7 +6,7 @@
 
 import { chromium } from 'playwright';
 import { createServer } from 'http';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, copyFileSync } from 'fs';
 import { join, extname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -55,7 +55,9 @@ function startServer(port) {
     console.log('Starting local server...');
     const server = await startServer(port);
 
-    const browser = await chromium.launch();
+    const browser = await chromium.launch(
+        process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {},
+    );
     const page = await browser.newPage();
 
     try {
@@ -68,7 +70,10 @@ function startServer(port) {
             margin: { top: '0', bottom: '0', left: '0', right: '0' },
         });
 
-        console.log(`CV PDF generated → public/cv.pdf`);
+        // Keep the already-built dist/ in sync so a deploy of dist/ ships the fresh PDF
+        copyFileSync(outputPath, join(distDir, 'cv.pdf'));
+
+        console.log(`CV PDF generated → public/cv.pdf (and dist/cv.pdf)`);
     } finally {
         await browser.close();
         server.close();
